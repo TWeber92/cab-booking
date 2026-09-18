@@ -1,0 +1,29 @@
+# Build
+target/
+*.class
+
+# Node
+node_modules/
+package.json
+package-lock.json
+.prettierrc
+
+# IDE
+.idea/
+*.iml
+.vscode/
+.settings/
+.classpath
+.project
+
+# Logs
+*.log
+log/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Infosys grader artifacts
+verification/
+verificationResources/
