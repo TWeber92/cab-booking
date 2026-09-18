@@ -94,14 +94,7 @@ Request:
 ```
 
 Response (201):
-
-```
 Booking successful 1004
-```
 
 Running Tests
 .\mvnw test
-
-```
-
-```
