@@ -2,7 +2,6 @@ package com.infy.cabbooking.api;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,20 +19,26 @@ import com.infy.cabbooking.service.CabBookingService;
 @RestController
 @RequestMapping("/api")
 public class CabBookingAPI {
-	@Autowired
-	private CabBookingService cabBookingService;
-	@Autowired
-	Environment environment;
+
+	private final CabBookingService cabBookingService;
+	private final Environment environment;
+
+	public CabBookingAPI(CabBookingService cabBookingService, Environment environment) {
+		this.cabBookingService = cabBookingService;
+		this.environment = environment;
+	}
 
 	@GetMapping("/cab/{bookingType}")
-	public ResponseEntity<List<BookingDTO>> getDetailsByBookingType(@PathVariable String bookingType) throws CabBookingException {
+	public ResponseEntity<List<BookingDTO>> getDetailsByBookingType(@PathVariable String bookingType)
+			throws CabBookingException {
 		List<BookingDTO> bookingsByType = cabBookingService.getDetailsByBookingType(bookingType);
 		return new ResponseEntity<List<BookingDTO>>(bookingsByType, HttpStatus.OK);
 	}
+
 	@PostMapping("/cab")
 	public ResponseEntity<String> bookCab(@RequestBody BookingDTO bookingDTO) throws CabBookingException {
 		Integer bookingId = cabBookingService.bookCab(bookingDTO);
-		String successMsg = environment.getProperty("API.BOOKING_SUCCESS") +" "+ bookingId;
+		String successMsg = environment.getProperty("API.BOOKING_SUCCESS") + " " + bookingId;
 		return new ResponseEntity<String>(successMsg, HttpStatus.CREATED);
 	}
 

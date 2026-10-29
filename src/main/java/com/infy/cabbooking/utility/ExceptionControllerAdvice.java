@@ -2,45 +2,43 @@ package com.infy.cabbooking.utility;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.infy.cabbooking.exception.CabBookingException;
 
-@RestControllerAdvice
-public class ExceptionControllerAdvice
-{
+public class ExceptionControllerAdvice {
+
     private static final Log LOGGER = LogFactory.getLog(ExceptionControllerAdvice.class);
 
-    @Autowired
-    private Environment environment;
+    private final Environment environment;
+
+    public ExceptionControllerAdvice(Environment environment) {
+        this.environment = environment;
+    }
 
     @ExceptionHandler(CabBookingException.class)
-    public ResponseEntity<ErrorInfo> eventRegistrationExceptionHandler(CabBookingException exception)
-    {
-	LOGGER.error(exception.getMessage(), exception);
+    public ResponseEntity<ErrorInfo> eventRegistrationExceptionHandler(CabBookingException exception) {
+        LOGGER.error(exception.getMessage(), exception);
 
-	ErrorInfo errorInfo = new ErrorInfo();
-	errorInfo.setErrorCode(HttpStatus.BAD_REQUEST.value());
-	errorInfo.setErrorMessage(environment.getProperty(exception.getMessage()));
+        ErrorInfo errorInfo = new ErrorInfo();
+        errorInfo.setErrorCode(HttpStatus.BAD_REQUEST.value());
+        errorInfo.setErrorMessage(environment.getProperty(exception.getMessage()));
 
-	return new ResponseEntity<>(errorInfo, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(errorInfo, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorInfo> generalExceptionHandler(Exception exception)
-    {
-	LOGGER.error(exception.getMessage(), exception);
+    public ResponseEntity<ErrorInfo> generalExceptionHandler(Exception exception) {
+        LOGGER.error(exception.getMessage(), exception);
 
-	ErrorInfo errorInfo = new ErrorInfo();
-	errorInfo.setErrorCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
-	errorInfo.setErrorMessage(environment.getProperty("General.EXCEPTION_MESSAGE"));
+        ErrorInfo errorInfo = new ErrorInfo();
+        errorInfo.setErrorCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        errorInfo.setErrorMessage(environment.getProperty("General.EXCEPTION_MESSAGE"));
 
-	return new ResponseEntity<>(errorInfo,
-				    HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(errorInfo,
+                HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
