@@ -2,8 +2,10 @@ package com.infy.cabbooking.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "cabs")
 public class Cab {
 	@Id
 	private Integer cabNo;
